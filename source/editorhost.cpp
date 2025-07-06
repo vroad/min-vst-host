@@ -224,6 +224,15 @@ void App::createViewAndShow(IEditController *controller) {
 }
 
 //------------------------------------------------------------------------
+void App::startAudioClient() {
+  OPtr<IComponent> component = plugProvider->getComponent();
+  OPtr<IEditController> controller = plugProvider->getController();
+  auto midiMapping = U::cast<IMidiMapping>(controller);
+
+  audioClient = AudioClient::create("MinVSTHost Core", component, midiMapping);
+}
+
+//------------------------------------------------------------------------
 void App::init(const std::vector<std::string> &cmdArgs) {
   VST3::Optional<VST3::UID> uid;
   uint32 flags{};
@@ -262,10 +271,13 @@ options:
   PluginContextFactory::instance().setPluginContext(&pluginContext);
 
   openEditor(cmdArgs.back(), std::move(uid), flags);
+
+  startAudioClient();
 }
 
 //------------------------------------------------------------------------
 void App::terminate() {
+  audioClient.reset();
   if (windowController)
     windowController->closePlugView();
   windowController.reset();

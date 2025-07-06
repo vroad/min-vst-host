@@ -33,6 +33,7 @@
 #include "public.sdk/source/vst/hosting/module.h"
 #include "public.sdk/source/vst/hosting/plugprovider.h"
 #include "public.sdk/source/vst/utility/optional.h"
+#include "source/media/audioclient.h"
 #include "source/platform/iapplication.h"
 #include "source/platform/iwindow.h"
 
@@ -58,12 +59,14 @@ private:
   void openEditor(const std::string &path, VST3::Optional<VST3::UID> effectID,
                   uint32 flags);
   void createViewAndShow(IEditController *controller);
+  void startAudioClient();
 
   VST3::Hosting::Module::Ptr module{nullptr};
   IPtr<PlugProvider> plugProvider{nullptr};
   Vst::HostApplication pluginContext;
   WindowPtr window;
   std::shared_ptr<WindowController> windowController;
+  AudioClientPtr audioClient;
 };
 
 //------------------------------------------------------------------------
