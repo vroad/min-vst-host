@@ -30,11 +30,11 @@
 #pragma once
 
 #include "pluginterfaces/vst/ivstaudioprocessor.h"
-#include "public.sdk/samples/vst-hosting/audiohost/source/media/imediaserver.h"
-#include "public.sdk/samples/vst-hosting/audiohost/source/media/iparameterclient.h"
 #include "public.sdk/source/vst/hosting/eventlist.h"
 #include "public.sdk/source/vst/hosting/parameterchanges.h"
 #include "public.sdk/source/vst/hosting/processdata.h"
+#include "source/media/imediaserver.h"
+#include "source/media/iparameterclient.h"
 #include <array>
 
 //------------------------------------------------------------------------
