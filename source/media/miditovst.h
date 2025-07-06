@@ -32,7 +32,6 @@
 #include "pluginterfaces/vst/ivstevents.h"
 #include "pluginterfaces/vst/ivstmidicontrollers.h"
 #include <functional>
-#include <limits>
 
 //------------------------------------------------------------------------
 namespace Steinberg {

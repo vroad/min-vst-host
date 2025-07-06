@@ -34,10 +34,8 @@
 #include "public.sdk/source/vst/utility/stringconvert.h"
 #include "pluginterfaces/vst/ivsteditcontroller.h"
 #include "pluginterfaces/vst/ivstmidicontrollers.h"
-#include <functional>
 
 #include <cassert>
-#include <limits>
 
 //------------------------------------------------------------------------
 namespace Steinberg {
