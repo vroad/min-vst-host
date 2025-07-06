@@ -29,6 +29,7 @@
 
 #pragma once
 
+#include "pluginterfaces/vst/ivstcomponent.h"
 #include "public.sdk/source/vst/hosting/hostclasses.h"
 #include "public.sdk/source/vst/hosting/module.h"
 #include "public.sdk/source/vst/hosting/plugprovider.h"
@@ -48,6 +49,7 @@ class WindowController;
 struct PluginConfig {
   std::string plugin_path;
   std::optional<std::string> uid;
+  std::optional<std::string> plugin_state_path;
 };
 
 //------------------------------------------------------------------------
@@ -72,7 +74,9 @@ private:
   WindowPtr window;
   std::shared_ptr<WindowController> windowController;
   AudioClientPtr audioClient;
+  std::string pluginStatePath;
   PluginConfig pluginConfig;
+  IPtr<IComponent> plugProviderComponent;
 };
 
 //------------------------------------------------------------------------
