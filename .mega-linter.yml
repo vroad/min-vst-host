@@ -36,5 +36,6 @@ SHOW_ELAPSED_TIME: true
 
 ADDITIONAL_EXCLUDED_DIRECTORIES:
   - vst3sdk
+  - toml11
 
 CPP_CPPCHECK_ARGUMENTS: --language=c++ --check-level=exhaustive
