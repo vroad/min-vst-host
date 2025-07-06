@@ -28,7 +28,6 @@
 //-----------------------------------------------------------------------------
 
 #include "source/editorhost.h"
-#include "base/source/fcommandline.h"
 #include "base/source/fdebug.h"
 #include "pluginterfaces/base/funknown.h"
 #include "pluginterfaces/gui/iplugview.h"
@@ -38,7 +37,6 @@
 #include "pluginterfaces/vst/vsttypes.h"
 #include "source/platform/appinit.h"
 #include <cstdio>
-#include <iostream>
 
 //------------------------------------------------------------------------
 namespace Steinberg {

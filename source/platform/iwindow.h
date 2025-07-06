@@ -31,7 +31,6 @@
 
 #include "pluginterfaces/gui/iplugview.h"
 #include <memory>
-#include <string>
 
 //------------------------------------------------------------------------
 namespace Steinberg {
