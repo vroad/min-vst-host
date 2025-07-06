@@ -246,13 +246,13 @@ usage: EditorHost [options] pluginPath
 options:
 
 --componentHandler
-	set optional component handler on edit controller
+  set optional component handler on edit controller
 
 --secondWindow
-	create a second window
+  create a second window
 
 --uid UID
-	use effect class with unique class ID==UID
+  use effect class with unique class ID==UID
 )";
 
     IPlatform::instance().kill(0, helpText);
