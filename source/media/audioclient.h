@@ -1,13 +1,4 @@
 //-----------------------------------------------------------------------------
-// Flags       : clang-format auto
-// Project     : VST SDK
-//
-// Category    : AudioHost
-// Filename    : public.sdk/samples/vst-hosting/audiohost/source/audioclient.h
-// Created by  : Steinberg 09.2016
-// Description : Audio Host Example for VST 3
-//
-//-----------------------------------------------------------------------------
 // LICENSE
 // (c) 2024, Steinberg Media Technologies GmbH, All Rights Reserved
 //-----------------------------------------------------------------------------
@@ -55,8 +46,8 @@ class IComponent;
 
 enum
 {
-	kMaxMidiMappingBusses = 4,
-	kMaxMidiChannels = 16
+  kMaxMidiMappingBusses = 4,
+  kMaxMidiChannels = 16
 };
 using Controllers = std::vector<int32>;
 using Channels = std::array<Controllers, kMaxMidiChannels>;
@@ -70,57 +61,57 @@ class AudioClient : public IAudioClient, public IMidiClient, public IParameterCl
 {
 public:
 //--------------------------------------------------------------------
-	using Name = std::string;
+  using Name = std::string;
 
-	AudioClient ();
-	~AudioClient () override;
+  AudioClient ();
+  ~AudioClient () override;
 
-	static AudioClientPtr create (const Name& name, IComponent* component,
-	                              IMidiMapping* midiMapping);
+  static AudioClientPtr create (const Name& name, IComponent* component,
+                                IMidiMapping* midiMapping);
 
-	// IAudioClient
-	bool process (Buffers& buffers, int64_t continousFrames) override;
-	bool setSamplerate (SampleRate value) override;
-	bool setBlockSize (int32 value) override;
-	IAudioClient::IOSetup getIOSetup () const override;
+  // IAudioClient
+  bool process (Buffers& buffers, int64_t continousFrames) override;
+  bool setSamplerate (SampleRate value) override;
+  bool setBlockSize (int32 value) override;
+  IAudioClient::IOSetup getIOSetup () const override;
 
-	// IMidiClient
-	bool onEvent (const Event& event, int32_t port) override;
-	IMidiClient::IOSetup getMidiIOSetup () const override;
+  // IMidiClient
+  bool onEvent (const Event& event, int32_t port) override;
+  IMidiClient::IOSetup getMidiIOSetup () const override;
 
-	// IParameterClient
-	void setParameter (ParamID id, ParamValue value, int32 sampleOffset) override;
+  // IParameterClient
+  void setParameter (ParamID id, ParamValue value, int32 sampleOffset) override;
 
-	bool initialize (const Name& name, IComponent* component, IMidiMapping* midiMapping);
+  bool initialize (const Name& name, IComponent* component, IMidiMapping* midiMapping);
 
 //--------------------------------------------------------------------
 private:
-	void createLocalMediaServer (const Name& name);
-	void terminate ();
-	void updateBusBuffers (Buffers& buffers, HostProcessData& processData);
-	void initProcessData ();
-	void initProcessContext ();
-	bool updateProcessSetup ();
-	void preprocess (Buffers& buffers, int64_t continousFrames);
-	void postprocess (Buffers& buffers);
-	bool isPortInRange (int32 port, int32 channel) const;
-	bool processVstEvent (const IMidiClient::Event& event, int32 port);
-	bool processParamChange (const IMidiClient::Event& event, int32 port);
+  void createLocalMediaServer (const Name& name);
+  void terminate ();
+  void updateBusBuffers (Buffers& buffers, HostProcessData& processData);
+  void initProcessData ();
+  void initProcessContext ();
+  bool updateProcessSetup ();
+  void preprocess (Buffers& buffers, int64_t continousFrames);
+  void postprocess (Buffers& buffers);
+  bool isPortInRange (int32 port, int32 channel) const;
+  bool processVstEvent (const IMidiClient::Event& event, int32 port);
+  bool processParamChange (const IMidiClient::Event& event, int32 port);
 
-	SampleRate sampleRate = 0;
-	int32 blockSize = 0;
-	HostProcessData processData;
-	ProcessContext processContext;
-	EventList eventList;
-	ParameterChanges inputParameterChanges;
-	IComponent* component = nullptr;
-	ParameterChangeTransfer paramTransferrer;
+  SampleRate sampleRate = 0;
+  int32 blockSize = 0;
+  HostProcessData processData;
+  ProcessContext processContext;
+  EventList eventList;
+  ParameterChanges inputParameterChanges;
+  IComponent* component = nullptr;
+  ParameterChangeTransfer paramTransferrer;
 
-	MidiCCMapping midiCCMapping;
-	IMediaServerPtr mediaServer;
-	bool isProcessing = false;
+  MidiCCMapping midiCCMapping;
+  IMediaServerPtr mediaServer;
+  bool isProcessing = false;
 
-	Name name;
+  Name name;
 };
 
 //------------------------------------------------------------------------

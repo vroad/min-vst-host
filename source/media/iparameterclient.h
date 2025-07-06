@@ -1,13 +1,4 @@
 //-----------------------------------------------------------------------------
-// Flags       : clang-format auto
-// Project     : VST SDK
-//
-// Category    : AudioHost
-// Filename    : public.sdk/samples/vst-hosting/audiohost/source/media/iparameterclient.h
-// Created by  : Steinberg 09.2016
-// Description : Audio Host Example for VST 3
-//
-//-----------------------------------------------------------------------------
 // LICENSE
 // (c) 2024, Steinberg Media Technologies GmbH, All Rights Reserved
 //-----------------------------------------------------------------------------
@@ -47,9 +38,9 @@ namespace Vst {
 //----------------------------------------------------------------------------------
 struct IParameterClient
 {
-	virtual void setParameter (ParamID id, ParamValue value, int32 sampleOffset) = 0;
+  virtual void setParameter (ParamID id, ParamValue value, int32 sampleOffset) = 0;
 
-	virtual ~IParameterClient () {}
+  virtual ~IParameterClient () {}
 };
 //----------------------------------------------------------------------------------
 using IParameterClientPtr = std::weak_ptr<IParameterClient>;
