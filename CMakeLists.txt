@@ -28,10 +28,7 @@ set(min_vst_host_sources
 
 if(SMTG_LINUX)
   find_package(X11 REQUIRED)
-  find_package(PkgConfig REQUIRED)
-  pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-  pkg_check_modules(GTKMM3 REQUIRED gtkmm-3.0)
-  include_directories(${X11_INCLUDE_DIR} ${GTKMM3_INCLUDE_DIRS} ${GTK3_INCLUDE_DIRS})
+  include_directories(${X11_INCLUDE_DIR})
   set(min_vst_host_sources
     ${min_vst_host_sources}
     source/platform/linux/platform.cpp
@@ -43,8 +40,6 @@ if(SMTG_LINUX)
   )
   set(min_vst_host_PLATFORM_LIBS
     ${X11_LIBRARIES}
-    ${GTK3_LIBRARIES}
-    ${GTKMM3_LIBRARIES}
   )
 endif()
 
