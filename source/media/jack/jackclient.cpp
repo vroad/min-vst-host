@@ -27,7 +27,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#include "public.sdk/samples/vst-hosting/audiohost/source/media/imediaserver.h"
+#include "source/media/imediaserver.h"
 
 #include <cassert>
 
