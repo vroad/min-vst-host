@@ -27,9 +27,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#include "public.sdk/samples/vst-hosting/editorhost/source/platform/iplatform.h"
-#include "public.sdk/samples/vst-hosting/editorhost/source/platform/linux/irunloopimpl.h"
-#include "public.sdk/samples/vst-hosting/editorhost/source/platform/linux/window.h"
+#include "source/platform/iplatform.h"
+#include "source/platform/linux/irunloopimpl.h"
+#include "source/platform/linux/window.h"
 
 #include <chrono>
 #include <iostream>

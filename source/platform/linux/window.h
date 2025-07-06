@@ -29,7 +29,7 @@
 
 #pragma once
 
-#include "public.sdk/samples/vst-hosting/editorhost/source/platform/iwindow.h"
+#include "source/platform/iwindow.h"
 #include <functional>
 
 struct _XDisplay;

@@ -29,7 +29,7 @@
 
 #include "window.h"
 
-#include "public.sdk/samples/vst-hosting/editorhost/source/platform/linux/irunloopimpl.h"
+#include "source/platform/linux/irunloopimpl.h"
 #include "public.sdk/source/vst/utility/stringconvert.h"
 
 #include <cassert>

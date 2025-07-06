@@ -27,7 +27,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#include "public.sdk/samples/vst-hosting/editorhost/source/editorhost.h"
+#include "source/editorhost.h"
 #include "base/source/fcommandline.h"
 #include "base/source/fdebug.h"
 #include "pluginterfaces/base/funknown.h"
@@ -36,7 +36,7 @@
 #include "pluginterfaces/vst/ivstaudioprocessor.h"
 #include "pluginterfaces/vst/ivsteditcontroller.h"
 #include "pluginterfaces/vst/vsttypes.h"
-#include "public.sdk/samples/vst-hosting/editorhost/source/platform/appinit.h"
+#include "source/platform/appinit.h"
 #include <cstdio>
 #include <iostream>
 

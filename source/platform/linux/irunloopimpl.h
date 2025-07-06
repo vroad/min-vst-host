@@ -31,7 +31,7 @@
 
 #include "pluginterfaces/base/funknownimpl.h"
 #include "pluginterfaces/gui/iplugview.h"
-#include "public.sdk/samples/vst-hosting/editorhost/source/platform/linux/runloop.h"
+#include "source/platform/linux/runloop.h"
 
 #include <algorithm>
 

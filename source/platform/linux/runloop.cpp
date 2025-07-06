@@ -27,7 +27,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#include "public.sdk/samples/vst-hosting/editorhost/source/platform/linux/runloop.h"
+#include "source/platform/linux/runloop.h"
 #include <algorithm>
 #include <iostream>
 

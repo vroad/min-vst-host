@@ -29,8 +29,8 @@
 
 #pragma once
 
-#include "public.sdk/samples/vst-hosting/editorhost/source/platform/iapplication.h"
-#include "public.sdk/samples/vst-hosting/editorhost/source/platform/iplatform.h"
+#include "source/platform/iapplication.h"
+#include "source/platform/iplatform.h"
 
 //------------------------------------------------------------------------
 namespace Steinberg {

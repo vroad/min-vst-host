@@ -29,8 +29,8 @@
 
 #pragma once
 
-#include "public.sdk/samples/vst-hosting/editorhost/source/platform/iapplication.h"
-#include "public.sdk/samples/vst-hosting/editorhost/source/platform/iwindow.h"
+#include "source/platform/iapplication.h"
+#include "source/platform/iwindow.h"
 #include "public.sdk/source/vst/hosting/hostclasses.h"
 #include "public.sdk/source/vst/hosting/module.h"
 #include "public.sdk/source/vst/hosting/plugprovider.h"
