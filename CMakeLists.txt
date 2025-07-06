@@ -27,6 +27,8 @@ add_subdirectory(${SDK_ROOT}/public.sdk)
 smtg_setup_platform_toolset()
 smtg_setup_symbol_visibility()
 
+include(SMTG_FindJack)
+
 set(MIN_VST_HOST_SOURCES
   ${SDK_ROOT}/public.sdk/source/vst/hosting/plugprovider.cpp
   ${SDK_ROOT}/public.sdk/source/vst/hosting/plugprovider.h
@@ -37,6 +39,11 @@ set(MIN_VST_HOST_SOURCES
   source/platform/iplatform.h
   source/platform/iwindow.h
   source/usediids.cpp
+  source/media/audioclient.cpp
+  source/media/audioclient.h
+  source/media/imediaserver.h
+  source/media/iparameterclient.h
+  source/media/jack/jackclient.cpp
 )
 
 if(SMTG_LINUX)
@@ -67,6 +74,9 @@ target_link_libraries(min-vst-host
   PRIVATE
     sdk_hosting
     ${MIN_VST_HOST_PLATFORM_LIBS}
+    ${LIBJACK_LIBRARY}
 )
 
-target_include_directories(min-vst-host PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(min-vst-host PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${LIBJACK_INCLUDE_DIR})
