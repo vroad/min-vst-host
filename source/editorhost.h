@@ -29,12 +29,12 @@
 
 #pragma once
 
-#include "source/platform/iapplication.h"
-#include "source/platform/iwindow.h"
 #include "public.sdk/source/vst/hosting/hostclasses.h"
 #include "public.sdk/source/vst/hosting/module.h"
 #include "public.sdk/source/vst/hosting/plugprovider.h"
 #include "public.sdk/source/vst/utility/optional.h"
+#include "source/platform/iapplication.h"
+#include "source/platform/iwindow.h"
 
 //------------------------------------------------------------------------
 namespace Steinberg {

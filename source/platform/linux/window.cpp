@@ -29,8 +29,8 @@
 
 #include "window.h"
 
-#include "source/platform/linux/irunloopimpl.h"
 #include "public.sdk/source/vst/utility/stringconvert.h"
+#include "source/platform/linux/irunloopimpl.h"
 
 #include <cassert>
 #include <iostream>
