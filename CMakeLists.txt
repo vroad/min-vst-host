@@ -5,6 +5,10 @@ include(SMTG_VST3_SDK)
 
 project(min-vst-host)
 
+if(NOT (CMAKE_SYSTEM_NAME STREQUAL "Linux"))
+  message(FATAL_ERROR "This project supports only Linux platforms.")
+endif()
+
 set(VST_SDK TRUE)
 set(SDK_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/libs/vst3sdk")
 add_subdirectory(${SDK_ROOT}/pluginterfaces)
