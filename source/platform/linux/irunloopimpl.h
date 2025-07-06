@@ -1,14 +1,4 @@
 //-----------------------------------------------------------------------------
-// Flags       : clang-format auto
-// Project     : VST SDK
-//
-// Category    : EditorHost
-// Filename    :
-// public.sdk/samples/vst-hosting/editorhost/source/platform/linux/irunloopimpl.h
-// Created by  : Steinberg 09.2023
-// Description : Example of opening a plug-in editor
-//
-//-----------------------------------------------------------------------------
 // LICENSE
 // (c) 2023, Steinberg Media Technologies GmbH, All Rights Reserved
 //-----------------------------------------------------------------------------

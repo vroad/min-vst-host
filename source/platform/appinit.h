@@ -1,12 +1,3 @@
-//------------------------------------------------------------------------
-// Flags       : clang-format auto
-// Project     : VST SDK
-//
-// Category    : EditorHost
-// Filename    :
-// public.sdk/samples/vst-hosting/editorhost/source/platform/appinit.h Created
-// by  : Steinberg, 04/2005 Description : Editor Host Example for VST SDK 3
-//
 //-----------------------------------------------------------------------------
 // LICENSE
 // (c) 2024, Steinberg Media Technologies GmbH, All Rights Reserved

@@ -1,13 +1,4 @@
 //-----------------------------------------------------------------------------
-// Flags       : clang-format auto
-// Project     : VST SDK
-//
-// Category    : EditorHost
-// Filename    : public.sdk/samples/vst-hosting/editorhost/source/usediids.cpp
-// Created by  : Steinberg 09.2008
-// Description : Interface symbols file
-//
-//-----------------------------------------------------------------------------
 // LICENSE
 // (c) 2024, Steinberg Media Technologies GmbH, All Rights Reserved
 //-----------------------------------------------------------------------------

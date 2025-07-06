@@ -1,13 +1,4 @@
 //-----------------------------------------------------------------------------
-// Flags       : clang-format auto
-// Project     : VST SDK
-//
-// Category    : EditorHost
-// Filename    : public.sdk/samples/vst-hosting/editorhost/source/editorhost.h
-// Created by  : Steinberg 09.2016
-// Description : Example of opening a Plug-in editor
-//
-//-----------------------------------------------------------------------------
 // LICENSE
 // (c) 2024, Steinberg Media Technologies GmbH, All Rights Reserved
 //-----------------------------------------------------------------------------
