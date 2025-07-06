@@ -35,6 +35,7 @@
 #include "pluginterfaces/vst/ivstaudioprocessor.h"
 #include "pluginterfaces/vst/ivsteditcontroller.h"
 #include "pluginterfaces/vst/vsttypes.h"
+#include "public.sdk/source/vst/vstpresetfile.h"
 #include "source/platform/appinit.h"
 #include "toml11/toml.hpp"
 #include <cassert>
@@ -42,7 +43,8 @@
 
 //------------------------------------------------------------------------
 TOML11_DEFINE_CONVERSION_NON_INTRUSIVE(
-  ::Steinberg::Vst::EditorHost::PluginConfig, plugin_path, uid);
+    ::Steinberg::Vst::EditorHost::PluginConfig, plugin_path, uid,
+    plugin_state_path);
 
 //------------------------------------------------------------------------
 namespace Steinberg {
@@ -145,6 +147,8 @@ App::~App() noexcept { terminate(); }
 //------------------------------------------------------------------------
 void App::openEditor(const PluginConfig &cfg, uint32 flags) {
   VST3::Optional<VST3::UID> effectID = VST3::UID::fromString(*cfg.uid);
+  if (auto const &s = cfg.plugin_state_path)
+    pluginStatePath = *s;
 
   std::string error;
   module = VST3::Hosting::Module::create(cfg.plugin_path, error);
@@ -168,6 +172,8 @@ void App::openEditor(const PluginConfig &cfg, uint32 flags) {
       plugProvider = owned(new PlugProvider(factory, classInfo, true));
       if (plugProvider->initialize() == false)
         plugProvider = nullptr;
+      else
+        plugProviderComponent = owned(plugProvider->getComponent());
       break;
     }
   }
@@ -192,6 +198,17 @@ void App::openEditor(const PluginConfig &cfg, uint32 flags) {
   if (flags & kSetComponentHandler) {
     SMTG_DBPRT0("setComponentHandler is used\n");
     editController->setComponentHandler(&gComponentHandler);
+  }
+
+  if (!pluginStatePath.empty()) {
+    if (IPtr<IBStream> stream =
+            owned(FileStream::open(pluginStatePath.c_str(), "r"))) {
+      FUID uid;
+      if (plugProvider->getComponentUID(uid) == kResultTrue) {
+        PresetFile::loadPreset(stream, uid, plugProviderComponent,
+                               editController);
+      }
+    }
   }
 
   SMTG_DBPRT1("Open Editor for %s...\n", cfg.plugin_path.c_str());
@@ -283,6 +300,19 @@ void App::terminate() {
   if (windowController)
     windowController->closePlugView();
   windowController.reset();
+
+  if (plugProvider && !pluginStatePath.empty()) {
+    if (IPtr<IBStream> stream =
+            owned(FileStream::open(pluginStatePath.c_str(), "w"))) {
+      FUID uid;
+      if (plugProvider->getComponentUID(uid) == kResultTrue) {
+        IComponent *component = plugProvider->getComponent();
+        IEditController *controller = plugProvider->getController();
+        PresetFile::savePreset(stream, uid, component, controller);
+      }
+    }
+  }
+
   plugProvider.reset();
   module.reset();
   PluginContextFactory::instance().setPluginContext(nullptr);
