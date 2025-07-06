@@ -41,6 +41,8 @@ if(SMTG_LINUX)
   set(min_vst_host_PLATFORM_LIBS
     ${X11_LIBRARIES}
   )
+else()
+  message(FATAL_ERROR "This project supports only Linux platforms.")
 endif()
 
 add_executable(min-vst-host ${min_vst_host_sources})
