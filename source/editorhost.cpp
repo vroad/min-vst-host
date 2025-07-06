@@ -36,7 +36,13 @@
 #include "pluginterfaces/vst/ivsteditcontroller.h"
 #include "pluginterfaces/vst/vsttypes.h"
 #include "source/platform/appinit.h"
+#include "toml11/toml.hpp"
+#include <cassert>
 #include <cstdio>
+
+//------------------------------------------------------------------------
+TOML11_DEFINE_CONVERSION_NON_INTRUSIVE(
+  ::Steinberg::Vst::EditorHost::PluginConfig, plugin_path, uid);
 
 //------------------------------------------------------------------------
 namespace Steinberg {
@@ -137,13 +143,14 @@ static ComponentHandler gComponentHandler;
 App::~App() noexcept { terminate(); }
 
 //------------------------------------------------------------------------
-void App::openEditor(const std::string &path,
-                     VST3::Optional<VST3::UID> effectID, uint32 flags) {
+void App::openEditor(const PluginConfig &cfg, uint32 flags) {
+  VST3::Optional<VST3::UID> effectID = VST3::UID::fromString(*cfg.uid);
+
   std::string error;
-  module = VST3::Hosting::Module::create(path, error);
+  module = VST3::Hosting::Module::create(cfg.plugin_path, error);
   if (!module) {
     std::string reason = "Could not create Module for file:";
-    reason += path;
+    reason += cfg.plugin_path;
     reason += "\nError: ";
     reason += error;
     IPlatform::instance().kill(-1, reason);
@@ -170,14 +177,14 @@ void App::openEditor(const std::string &path,
               " found in file ";
     else
       error = "No VST3 Audio Module Class found in file ";
-    error += path;
+    error += cfg.plugin_path;
     IPlatform::instance().kill(-1, error);
   }
 
   auto editController = plugProvider->getController();
   if (!editController) {
-    error =
-        "No EditController found (needed for allowing editor) in file " + path;
+    error = "No EditController found (needed for allowing editor) in file " +
+            cfg.plugin_path;
     IPlatform::instance().kill(-1, error);
   }
   editController->release(); // plugProvider does an addRef
@@ -187,7 +194,7 @@ void App::openEditor(const std::string &path,
     editController->setComponentHandler(&gComponentHandler);
   }
 
-  SMTG_DBPRT1("Open Editor for %s...\n", path.c_str());
+  SMTG_DBPRT1("Open Editor for %s...\n", cfg.plugin_path.c_str());
   createViewAndShow(editController);
 
   if (flags & kSecondWindow) {
@@ -234,24 +241,17 @@ void App::startAudioClient() {
 
 //------------------------------------------------------------------------
 void App::init(const std::vector<std::string> &cmdArgs) {
-  VST3::Optional<VST3::UID> uid;
   uint32 flags{};
   for (auto it = cmdArgs.begin(), end = cmdArgs.end(); it != end; ++it) {
     if (*it == "--componentHandler")
       flags |= kSetComponentHandler;
     else if (*it == "--secondWindow")
       flags |= kSecondWindow;
-    else if (*it == "--uid") {
-      if (++it != end)
-        uid = VST3::UID::fromString(*it);
-      if (!uid)
-        IPlatform::instance().kill(-1, "wrong argument to --uid");
-    }
   }
 
-  if (cmdArgs.empty() || cmdArgs.back().find(".vst3") == std::string::npos) {
+  if (cmdArgs.empty()) {
     auto helpText = R"(
-usage: EditorHost [options] pluginPath
+usage: EditorHost [options] configPath
 
 options:
 
@@ -260,9 +260,6 @@ options:
 
 --secondWindow
   create a second window
-
---uid UID
-  use effect class with unique class ID==UID
 )";
 
     IPlatform::instance().kill(0, helpText);
@@ -270,7 +267,12 @@ options:
 
   PluginContextFactory::instance().setPluginContext(&pluginContext);
 
-  openEditor(cmdArgs.back(), std::move(uid), flags);
+  auto configPath = cmdArgs.back();
+  auto config = toml::parse(configPath);
+  PluginConfig cfg = toml::get<PluginConfig>(config);
+  pluginConfig = cfg;
+
+  openEditor(cfg, flags);
 
   startAudioClient();
 }
