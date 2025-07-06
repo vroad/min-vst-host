@@ -139,7 +139,7 @@ NativePlatformWindow X11Window::getNativePlatformWindow() const {
 //------------------------------------------------------------------------
 tresult X11Window::queryInterface(const TUID iid, void **obj) {
   if (FUnknownPrivate::iidEqual(iid, Linux::IRunLoop::iid)) {
-    *obj = &(Linux::RunLoopImpl::instance());
+    *obj = static_cast<Linux::IRunLoop *>(&(Linux::RunLoopImpl::instance()));
     // as the run loop is a singleton it is not necessary to call a retain on
     // that object
     return kResultTrue;

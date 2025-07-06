@@ -76,9 +76,12 @@ public:
 
 private:
   tresult PLUGIN_API queryInterface(const TUID _iid, void **obj) override {
-    if (FUnknownPrivate::iidEqual(_iid, IPlugFrame::iid) ||
-        FUnknownPrivate::iidEqual(_iid, FUnknown::iid)) {
-      *obj = this;
+    if (FUnknownPrivate::iidEqual(_iid, FUnknown::iid)) {
+      *obj = static_cast<FUnknown *>(this);
+      addRef();
+      return kResultTrue;
+    } else if (FUnknownPrivate::iidEqual(_iid, IPlugFrame::iid)) {
+      *obj = static_cast<IPlugFrame *>(this);
       addRef();
       return kResultTrue;
     }
