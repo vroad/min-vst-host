@@ -77,22 +77,20 @@ void RunLoop::unregisterFileDescriptor(int fd) {
 //------------------------------------------------------------------------
 void RunLoop::select(timeval *timeout) {
   int nfds = 0;
-  fd_set readFDs = {}, writeFDs = {}, exceptFDs = {};
+  fd_set readFDs = {}, exceptFDs = {};
 
   for (auto &e : fileDescriptors) {
     int fd = e.first;
     FD_SET(fd, &readFDs);
-    FD_SET(fd, &writeFDs);
     FD_SET(fd, &exceptFDs);
     nfds = std::max(nfds, fd);
   }
 
-  int result = ::select(nfds, &readFDs, &writeFDs, nullptr, timeout);
+  int result = ::select(nfds, &readFDs, nullptr, nullptr, timeout);
 
   if (result > 0) {
     for (auto &e : fileDescriptors) {
-      if (FD_ISSET(e.first, &readFDs) || FD_ISSET(e.first, &writeFDs) ||
-          FD_ISSET(e.first, &exceptFDs))
+      if (FD_ISSET(e.first, &readFDs) || FD_ISSET(e.first, &exceptFDs))
         e.second(e.first);
     }
   }
