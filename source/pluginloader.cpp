@@ -40,7 +40,7 @@ PluginLoader::~PluginLoader() noexcept { unload(); }
 
 //------------------------------------------------------------------------
 IEditController *PluginLoader::load(const std::string &path,
-                                   VST3::Optional<VST3::UID> effectID) {
+                                    VST3::Optional<VST3::UID> effectID) {
   std::string error;
   module = VST3::Hosting::Module::create(path, error);
   if (!module) {
@@ -96,4 +96,3 @@ void PluginLoader::unload() {
 } // namespace EditorHost
 } // namespace Vst
 } // namespace Steinberg
-

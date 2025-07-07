@@ -30,10 +30,10 @@
 #pragma once
 
 #include "public.sdk/source/vst/hosting/hostclasses.h"
-#include "source/pluginloader.h"
 #include "public.sdk/source/vst/utility/optional.h"
 #include "source/platform/iapplication.h"
 #include "source/platform/iwindow.h"
+#include "source/pluginloader.h"
 
 //------------------------------------------------------------------------
 namespace Steinberg {

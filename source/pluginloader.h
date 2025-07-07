@@ -57,5 +57,3 @@ private:
 } // namespace EditorHost
 } // namespace Vst
 } // namespace Steinberg
-
-
