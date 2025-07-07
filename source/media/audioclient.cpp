@@ -160,6 +160,12 @@ bool AudioClient::initialize(const Name &name, IComponent *_component,
   if (midiMapping)
     midiCCMapping = initMidiCtrlerAssignment(component, midiMapping);
 
+  FUnknownPtr<IAudioProcessor> processor = component;
+  SpeakerArrangement inArr = SpeakerArr::k31Cine;
+  SpeakerArrangement outArr = SpeakerArr::k31Cine;
+  int busArrResponse = processor->setBusArrangements(&inArr, 1, &outArr, 1);
+  printf("setBusArrangements: %d\n", busArrResponse == kResultOk);
+
   createLocalMediaServer(name);
   return true;
 }
@@ -323,6 +329,13 @@ bool AudioClient::updateProcessSetup() {
 
   if (processor->setupProcessing(setup) != kResultOk)
     return false;
+
+  if (component->activateBus(kAudio, kInput, 0, true)) {
+    return false;
+  }
+  if (component->activateBus(kAudio, kOutput, 0, true)) {
+    return false;
+  }
 
   if (component->setActive(true) != kResultOk)
     return false;

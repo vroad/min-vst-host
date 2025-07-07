@@ -149,8 +149,8 @@ bool JackClient::registerAudioClient(IAudioClient *client) {
     return false;
 
   //! AFTER activation, register the ports.
-  if (!autoConnectAudioPorts(jackClient))
-    return false;
+  // if (!autoConnectAudioPorts(jackClient))
+  //   return false;
 
   return true;
 }
