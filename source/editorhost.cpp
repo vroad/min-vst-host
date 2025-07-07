@@ -140,46 +140,12 @@ App::~App() noexcept { terminate(); }
 void App::openEditor(const std::string &path,
                      VST3::Optional<VST3::UID> effectID, uint32 flags) {
   std::string error;
-  module = VST3::Hosting::Module::create(path, error);
-  if (!module) {
-    std::string reason = "Could not create Module for file:";
-    reason += path;
-    reason += "\nError: ";
-    reason += error;
-    IPlatform::instance().kill(-1, reason);
-  }
-
-  auto factory = module->getFactory();
-  if (auto factoryHostContext = IPlatform::instance().getPluginFactoryContext())
-    factory.setHostContext(factoryHostContext);
-  for (auto &classInfo : factory.classInfos()) {
-    if (classInfo.category() == kVstAudioEffectClass) {
-      if (effectID) {
-        if (*effectID != classInfo.ID())
-          continue;
-      }
-      plugProvider = owned(new PlugProvider(factory, classInfo, true));
-      if (plugProvider->initialize() == false)
-        plugProvider = nullptr;
-      break;
-    }
-  }
-  if (!plugProvider) {
-    if (effectID)
-      error = "No VST3 Audio Module Class with UID " + effectID->toString() +
-              " found in file ";
-    else
-      error = "No VST3 Audio Module Class found in file ";
-    error += path;
+  plugin = Plugin::load(path, std::move(effectID), error);
+  if (!plugin) {
     IPlatform::instance().kill(-1, error);
   }
 
-  auto editController = plugProvider->getController();
-  if (!editController) {
-    error =
-        "No EditController found (needed for allowing editor) in file " + path;
-    IPlatform::instance().kill(-1, error);
-  }
+  auto editController = plugin->getController();
   editController->release(); // plugProvider does an addRef
 
   if (flags & kSetComponentHandler) {
@@ -269,8 +235,7 @@ void App::terminate() {
   if (windowController)
     windowController->closePlugView();
   windowController.reset();
-  plugProvider.reset();
-  module.reset();
+  plugin.reset();
   PluginContextFactory::instance().setPluginContext(nullptr);
 }
 

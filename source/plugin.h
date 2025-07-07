@@ -1,3 +1,4 @@
+
 //-----------------------------------------------------------------------------
 // LICENSE
 // (c) 2024, Steinberg Media Technologies GmbH, All Rights Reserved
@@ -33,40 +34,29 @@
 #include "public.sdk/source/vst/hosting/module.h"
 #include "public.sdk/source/vst/hosting/plugprovider.h"
 #include "public.sdk/source/vst/utility/optional.h"
-#include "source/platform/iapplication.h"
-#include "source/platform/iwindow.h"
-#include "source/plugin.h"
+#include "source/platform/iplatform.h"
+#include <string>
 
-//------------------------------------------------------------------------
 namespace Steinberg {
 namespace Vst {
 namespace EditorHost {
 
-class WindowController;
-
-//------------------------------------------------------------------------
-class App : public IApplication {
+class Plugin {
 public:
-  ~App() noexcept override;
-  void init(const std::vector<std::string> &cmdArgs) override;
-  void terminate() override;
+  using Ptr = std::unique_ptr<Plugin>;
+
+  static Ptr load(const std::string &path, VST3::Optional<VST3::UID> effectID,
+                  std::string &error);
+
+  IPtr<IEditController> getController();
 
 private:
-  enum OpenFlags {
-    kSetComponentHandler = 1 << 0,
-    kSecondWindow = 1 << 1,
-  };
-  void openEditor(const std::string &path, VST3::Optional<VST3::UID> effectID,
-                  uint32 flags);
-  void createViewAndShow(IEditController *controller);
+  Plugin() = default;
 
-  Plugin::Ptr plugin{nullptr};
-  Vst::HostApplication pluginContext;
-  WindowPtr window;
-  std::shared_ptr<WindowController> windowController;
+  VST3::Hosting::Module::Ptr module{nullptr};
+  IPtr<PlugProvider> plugProvider{nullptr};
 };
 
-//------------------------------------------------------------------------
 } // namespace EditorHost
 } // namespace Vst
 } // namespace Steinberg
