@@ -17,6 +17,8 @@ smtg_setup_symbol_visibility()
 set(min_vst_host_sources
   ${SDK_ROOT}/public.sdk/source/vst/hosting/plugprovider.cpp
   ${SDK_ROOT}/public.sdk/source/vst/hosting/plugprovider.h
+  source/pluginloader.cpp
+  source/pluginloader.h
   source/editorhost.cpp
   source/editorhost.h
   source/platform/appinit.h

@@ -27,44 +27,73 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#pragma once
-
-#include "public.sdk/source/vst/hosting/hostclasses.h"
 #include "source/pluginloader.h"
-#include "public.sdk/source/vst/utility/optional.h"
-#include "source/platform/iapplication.h"
-#include "source/platform/iwindow.h"
+#include "source/platform/iplatform.h"
 
 //------------------------------------------------------------------------
 namespace Steinberg {
 namespace Vst {
 namespace EditorHost {
 
-class WindowController;
+//------------------------------------------------------------------------
+PluginLoader::~PluginLoader() noexcept { unload(); }
 
 //------------------------------------------------------------------------
-class App : public IApplication {
-public:
-  ~App() noexcept override;
-  void init(const std::vector<std::string> &cmdArgs) override;
-  void terminate() override;
+IEditController *PluginLoader::load(const std::string &path,
+                                   VST3::Optional<VST3::UID> effectID) {
+  std::string error;
+  module = VST3::Hosting::Module::create(path, error);
+  if (!module) {
+    std::string reason = "Could not create Module for file:";
+    reason += path;
+    reason += "\nError: ";
+    reason += error;
+    IPlatform::instance().kill(-1, reason);
+  }
 
-private:
-  enum OpenFlags {
-    kSetComponentHandler = 1 << 0,
-    kSecondWindow = 1 << 1,
-  };
-  void openEditor(const std::string &path, VST3::Optional<VST3::UID> effectID,
-                  uint32 flags);
-  void createViewAndShow(IEditController *controller);
+  auto factory = module->getFactory();
+  if (auto factoryHostContext = IPlatform::instance().getPluginFactoryContext())
+    factory.setHostContext(factoryHostContext);
+  for (auto &classInfo : factory.classInfos()) {
+    if (classInfo.category() == kVstAudioEffectClass) {
+      if (effectID) {
+        if (*effectID != classInfo.ID())
+          continue;
+      }
+      plugProvider = owned(new PlugProvider(factory, classInfo, true));
+      if (plugProvider->initialize() == false)
+        plugProvider = nullptr;
+      break;
+    }
+  }
+  if (!plugProvider) {
+    if (effectID)
+      error = "No VST3 Audio Module Class with UID " + effectID->toString() +
+              " found in file ";
+    else
+      error = "No VST3 Audio Module Class found in file ";
+    error += path;
+    IPlatform::instance().kill(-1, error);
+  }
 
-  PluginLoader pluginLoader;
-  Vst::HostApplication pluginContext;
-  WindowPtr window;
-  std::shared_ptr<WindowController> windowController;
-};
+  auto editController = plugProvider->getController();
+  if (!editController) {
+    error =
+        "No EditController found (needed for allowing editor) in file " + path;
+    IPlatform::instance().kill(-1, error);
+  }
+  editController->release(); // plugProvider does an addRef
+  return editController;
+}
+
+//------------------------------------------------------------------------
+void PluginLoader::unload() {
+  plugProvider.reset();
+  module.reset();
+}
 
 //------------------------------------------------------------------------
 } // namespace EditorHost
 } // namespace Vst
 } // namespace Steinberg
+
