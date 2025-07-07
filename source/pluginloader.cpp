@@ -28,6 +28,7 @@
 //-----------------------------------------------------------------------------
 
 #include "source/pluginloader.h"
+#include "pluginterfaces/vst/ivstaudioprocessor.h"
 #include "source/platform/iplatform.h"
 
 //------------------------------------------------------------------------
