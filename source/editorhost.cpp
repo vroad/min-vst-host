@@ -40,11 +40,12 @@
 #include "toml11/toml.hpp"
 #include <cassert>
 #include <cstdio>
+#include <vector>
 
 //------------------------------------------------------------------------
 TOML11_DEFINE_CONVERSION_NON_INTRUSIVE(
     ::Steinberg::Vst::EditorHost::PluginConfig, plugin_path, uid,
-    plugin_state_path);
+    plugin_state_path, input_bus_arrangements, output_bus_arrangements);
 
 //------------------------------------------------------------------------
 namespace Steinberg {
@@ -252,6 +253,34 @@ void App::startAudioClient() {
   OPtr<IComponent> component = plugProvider->getComponent();
   OPtr<IEditController> controller = plugProvider->getController();
   auto midiMapping = U::cast<IMidiMapping>(controller);
+
+  std::vector<SpeakerArrangement> inputArrangements;
+  if (pluginConfig.input_bus_arrangements) {
+    for (const auto &s : *pluginConfig.input_bus_arrangements) {
+      SpeakerArrangement arr =
+          SpeakerArr::getSpeakerArrangementFromString(s.c_str());
+      inputArrangements.push_back(arr);
+    }
+  }
+
+  std::vector<SpeakerArrangement> outputArrangements;
+  if (pluginConfig.output_bus_arrangements) {
+    for (const auto &s : *pluginConfig.output_bus_arrangements) {
+      SpeakerArrangement arr =
+          SpeakerArr::getSpeakerArrangementFromString(s.c_str());
+      outputArrangements.push_back(arr);
+    }
+  }
+
+  FUnknownPtr<IAudioProcessor> processor = static_cast<IComponent *>(component);
+
+  if (!inputArrangements.empty() || !outputArrangements.empty()) {
+    processor->setBusArrangements(
+        inputArrangements.empty() ? nullptr : inputArrangements.data(),
+        inputArrangements.size(),
+        outputArrangements.empty() ? nullptr : outputArrangements.data(),
+        outputArrangements.size());
+  }
 
   audioClient = AudioClient::create("MinVSTHost Core", component, midiMapping);
 }
