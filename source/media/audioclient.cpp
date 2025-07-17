@@ -160,12 +160,6 @@ bool AudioClient::initialize(const Name &name, IComponent *_component,
   if (midiMapping)
     midiCCMapping = initMidiCtrlerAssignment(component, midiMapping);
 
-  FUnknownPtr<IAudioProcessor> processor = component;
-  SpeakerArrangement inArr = SpeakerArr::k31Cine;
-  SpeakerArrangement outArr = SpeakerArr::k31Cine;
-  int busArrResponse = processor->setBusArrangements(&inArr, 1, &outArr, 1);
-  printf("setBusArrangements: %d\n", busArrResponse == kResultOk);
-
   createLocalMediaServer(name);
   return true;
 }
