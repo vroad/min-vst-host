@@ -38,6 +38,7 @@
 #include "source/platform/iwindow.h"
 #include <optional>
 #include <string>
+#include <vector>
 
 //------------------------------------------------------------------------
 namespace Steinberg {
@@ -50,6 +51,8 @@ struct PluginConfig {
   std::string plugin_path;
   std::optional<std::string> uid;
   std::optional<std::string> plugin_state_path;
+  std::optional<std::vector<std::string>> input_bus_arrangements;
+  std::optional<std::vector<std::string>> output_bus_arrangements;
 };
 
 //------------------------------------------------------------------------
