@@ -37,6 +37,7 @@
 #include "public.sdk/source/vst/utility/stringconvert.h"
 
 #include <cassert>
+#include <vector>
 
 //------------------------------------------------------------------------
 namespace Steinberg {
@@ -126,10 +127,13 @@ AudioClient::AudioClient() {}
 AudioClient::~AudioClient() { terminate(); }
 
 //------------------------------------------------------------------------
-AudioClientPtr AudioClient::create(const Name &name, IComponent *component,
-                                   IMidiMapping *midiMapping) {
+AudioClientPtr AudioClient::create(
+    const Name &name, IComponent *component, IMidiMapping *midiMapping,
+    const std::vector<SpeakerArrangement> &inputArrangements,
+    const std::vector<SpeakerArrangement> &outputArrangements) {
   auto newProcessor = std::make_shared<AudioClient>();
-  newProcessor->initialize(name, component, midiMapping);
+  newProcessor->initialize(name, component, midiMapping, inputArrangements,
+                           outputArrangements);
   return newProcessor;
 }
 
@@ -147,8 +151,10 @@ void AudioClient::createLocalMediaServer(const Name &name) {
 }
 
 //------------------------------------------------------------------------
-bool AudioClient::initialize(const Name &name, IComponent *_component,
-                             IMidiMapping *midiMapping) {
+bool AudioClient::initialize(
+    const Name &name, IComponent *_component, IMidiMapping *midiMapping,
+    const std::vector<SpeakerArrangement> &inputArrangements,
+    const std::vector<SpeakerArrangement> &outputArrangements) {
   component = _component;
   if (!component)
     return false;
@@ -161,10 +167,18 @@ bool AudioClient::initialize(const Name &name, IComponent *_component,
     midiCCMapping = initMidiCtrlerAssignment(component, midiMapping);
 
   FUnknownPtr<IAudioProcessor> processor = component;
-  SpeakerArrangement inArr = SpeakerArr::k31Cine;
-  SpeakerArrangement outArr = SpeakerArr::k31Cine;
-  int busArrResponse = processor->setBusArrangements(&inArr, 1, &outArr, 1);
-  printf("setBusArrangements: %d\n", busArrResponse == kResultOk);
+  if (processor) {
+    const int32 numInputs = static_cast<int32>(inputArrangements.size());
+    const int32 numOutputs = static_cast<int32>(outputArrangements.size());
+    const SpeakerArrangement *inArrPtr =
+        numInputs > 0 ? inputArrangements.data() : nullptr;
+    const SpeakerArrangement *outArrPtr =
+        numOutputs > 0 ? outputArrangements.data() : nullptr;
+    int busArrResponse =
+        processor->setBusArrangements(inArrPtr, numInputs, outArrPtr,
+                                      numOutputs);
+    printf("setBusArrangements: %d\n", busArrResponse == kResultOk);
+  }
 
   createLocalMediaServer(name);
   return true;

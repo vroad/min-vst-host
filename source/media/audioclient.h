@@ -36,6 +36,7 @@
 #include "source/media/imediaserver.h"
 #include "source/media/iparameterclient.h"
 #include <array>
+#include <vector>
 
 //------------------------------------------------------------------------
 namespace Steinberg {
@@ -65,7 +66,11 @@ public:
   ~AudioClient() override;
 
   static AudioClientPtr create(const Name &name, IComponent *component,
-                               IMidiMapping *midiMapping);
+                               IMidiMapping *midiMapping,
+                               const std::vector<SpeakerArrangement>
+                                   &inputArrangements,
+                               const std::vector<SpeakerArrangement>
+                                   &outputArrangements);
 
   // IAudioClient
   bool process(Buffers &buffers, int64_t continousFrames) override;
@@ -81,7 +86,9 @@ public:
   void setParameter(ParamID id, ParamValue value, int32 sampleOffset) override;
 
   bool initialize(const Name &name, IComponent *component,
-                  IMidiMapping *midiMapping);
+                  IMidiMapping *midiMapping,
+                  const std::vector<SpeakerArrangement> &inputArrangements,
+                  const std::vector<SpeakerArrangement> &outputArrangements);
 
   //--------------------------------------------------------------------
 private:

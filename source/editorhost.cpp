@@ -40,11 +40,12 @@
 #include "toml11/toml.hpp"
 #include <cassert>
 #include <cstdio>
+#include <vector>
 
 //------------------------------------------------------------------------
 TOML11_DEFINE_CONVERSION_NON_INTRUSIVE(
     ::Steinberg::Vst::EditorHost::PluginConfig, plugin_path, uid,
-    plugin_state_path);
+    plugin_state_path, input_bus_arrangements, output_bus_arrangements);
 
 //------------------------------------------------------------------------
 namespace Steinberg {
@@ -253,7 +254,27 @@ void App::startAudioClient() {
   OPtr<IEditController> controller = plugProvider->getController();
   auto midiMapping = U::cast<IMidiMapping>(controller);
 
-  audioClient = AudioClient::create("MinVSTHost Core", component, midiMapping);
+  std::vector<SpeakerArrangement> inputArrangements;
+  if (pluginConfig.input_bus_arrangements) {
+    for (const auto &s : *pluginConfig.input_bus_arrangements) {
+      SpeakerArrangement arr{};
+      if (SpeakerArr::getSpeakerArrangementFromString(s.c_str(), arr))
+        inputArrangements.push_back(arr);
+    }
+  }
+
+  std::vector<SpeakerArrangement> outputArrangements;
+  if (pluginConfig.output_bus_arrangements) {
+    for (const auto &s : *pluginConfig.output_bus_arrangements) {
+      SpeakerArrangement arr{};
+      if (SpeakerArr::getSpeakerArrangementFromString(s.c_str(), arr))
+        outputArrangements.push_back(arr);
+    }
+  }
+
+  audioClient =
+      AudioClient::create("MinVSTHost Core", component, midiMapping,
+                          inputArrangements, outputArrangements);
 }
 
 //------------------------------------------------------------------------
