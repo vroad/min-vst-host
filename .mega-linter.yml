@@ -38,4 +38,4 @@ ADDITIONAL_EXCLUDED_DIRECTORIES:
   - vst3sdk
   - toml11
 
-CPP_CPPCHECK_ARGUMENTS: --language=c++ --check-level=exhaustive
+CPP_CPPCHECK_ARGUMENTS: --language=c++ --check-level=exhaustive --suppressions-list=cppcheck-suppressions.txt
