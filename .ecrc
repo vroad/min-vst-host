@@ -1,5 +1,6 @@
 {
   "Exclude": [
-    "source/toml11/toml.hpp"
+    "source/toml11/toml.hpp",
+    "source/doctest/doctest.h"
   ]
 }
