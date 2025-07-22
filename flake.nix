@@ -17,6 +17,7 @@
         nativeBuildInputs = with pkgs; [
           gdb
           cpplint
+          clang-tools
           pre-commit
           nixpkgs-fmt
           nodejs_24
