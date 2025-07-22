@@ -1,0 +1,5 @@
+{
+  "Exclude": [
+    "source/toml11/toml.hpp"
+  ]
+}
