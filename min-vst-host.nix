@@ -5,8 +5,8 @@
 , pkg-config
 , xorg
 , jack2
+, nix-gitignore
 }:
-
 let
   vst3sdkArgs = builtins.fromJSON (builtins.readFile ./vst3sdk-source.json);
   vst3sdk = fetchFromGitHub {
@@ -14,18 +14,11 @@ let
     fetchSubmodules = true;
     deepClone = false;
   };
-
-  cleanSrc = lib.cleanSourceWith {
-    src = ./.;
-    filter = path: type:
-      lib.hasInfix "/libs/" path == false;
-  };
-
 in
 stdenv.mkDerivation {
   pname = "min-vst-host";
   version = "0.1";
-  src = cleanSrc;
+  src = nix-gitignore.gitignoreSource [ ] ./.;
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ xorg.libX11 jack2 ];
