@@ -4,3 +4,4 @@ build/
 result
 external/
 !external/.gitkeep
+launch.json
