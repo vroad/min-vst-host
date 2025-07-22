@@ -2,3 +2,6 @@ megalinter-reports/
 build/
 .cache/
 result
+libs/vst3sdk
+external/*
+!external/.gitkeep

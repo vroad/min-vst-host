@@ -8,11 +8,9 @@
 }:
 
 let
+  vst3sdkArgs = builtins.fromJSON (builtins.readFile ./vst3sdk-source.json);
   vst3sdk = fetchFromGitHub {
-    owner = "steinbergmedia";
-    repo = "vst3sdk";
-    rev = "43b4e366ff84afc9b4247776acbf5e234683b77f";
-    sha256 = "sha256-Tyh8InZhriRh2bP9YqaXoVv33CYlwro9mpBKmoPNTfU=";
+    inherit (vst3sdkArgs) owner repo rev sha256;
     fetchSubmodules = true;
     deepClone = false;
   };
@@ -33,8 +31,8 @@ stdenv.mkDerivation {
   buildInputs = [ xorg.libX11 jack2 ];
 
   preConfigure = ''
-    mkdir -p libs
-    ln -s ${vst3sdk} libs/vst3sdk
+    mkdir -p external
+    ln -s ${vst3sdk} external/vst3sdk
   '';
 
   installPhase = ''

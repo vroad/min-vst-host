@@ -1,18 +1,20 @@
 # MinVSTHost
 
 This repository contains a minimal host for VST3 plug-ins. The Steinberg
-VST3 SDK is included as a Git submodule.
+VST3 SDK is not tracked in this repository. Instead, use the helper
+script to download the SDK into `external/vst3sdk`.
 
 The host currently only supports Linux.
 
 ## Getting Started
 
-### Initialize submodules
+### Fetch the VST3 SDK
 
-Clone the repository and initialize the VST3 SDK submodule:
+Run the helper script to download the SDK specified in
+`vst3sdk-source.json`:
 
 ```bash
-git submodule update --init --recursive
+./scripts/download_vst3sdk.sh
 ```
 
 ### Build
@@ -24,6 +26,9 @@ Use CMake to configure and build the project. The example below uses the
 cmake -S . -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo
 cmake --build build
 ```
+
+To try a locally modified VST3 SDK, pass `-DVST3SDK_PATH=/path/to/sdk` to the
+CMake configuration command.
 
 The resulting executable `min-vst-host` will be placed in
 `build/bin/RelWithDebInfo` (replace `RelWithDebInfo` with your build

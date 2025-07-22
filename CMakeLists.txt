@@ -1,12 +1,25 @@
 cmake_minimum_required(VERSION 3.25.0)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libs/vst3sdk/cmake/modules")
+set(VST3SDK_PATH "" CACHE PATH "Path to a local VST3 SDK")
+
+if(VST3SDK_PATH STREQUAL "")
+  set(SDK_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/external/vst3sdk")
+  if(NOT EXISTS "${SDK_ROOT}")
+    message(FATAL_ERROR "VST3 SDK not found at ${SDK_ROOT}. See README for fetch instructions.")
+  endif()
+else()
+  if(NOT EXISTS "${VST3SDK_PATH}")
+    message(FATAL_ERROR "Specified VST3SDK_PATH '${VST3SDK_PATH}' does not exist")
+  endif()
+  set(SDK_ROOT "${VST3SDK_PATH}")
+endif()
+
+list(APPEND CMAKE_MODULE_PATH "${SDK_ROOT}/cmake/modules")
 include(SMTG_VST3_SDK)
 
 project(min-vst-host)
 
 set(VST_SDK TRUE)
-set(SDK_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/libs/vst3sdk")
 add_subdirectory(${SDK_ROOT}/pluginterfaces)
 add_subdirectory(${SDK_ROOT}/base)
 add_subdirectory(${SDK_ROOT}/public.sdk)
