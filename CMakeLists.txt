@@ -27,7 +27,7 @@ add_subdirectory(${SDK_ROOT}/public.sdk)
 smtg_setup_platform_toolset()
 smtg_setup_symbol_visibility()
 
-set(min_vst_host_sources
+set(MIN_VST_HOST_SOURCES
   ${SDK_ROOT}/public.sdk/source/vst/hosting/plugprovider.cpp
   ${SDK_ROOT}/public.sdk/source/vst/hosting/plugprovider.h
   source/editorhost.cpp
@@ -42,8 +42,8 @@ set(min_vst_host_sources
 if(SMTG_LINUX)
   find_package(X11 REQUIRED)
   include_directories(${X11_INCLUDE_DIR})
-  set(min_vst_host_sources
-    ${min_vst_host_sources}
+  set(MIN_VST_HOST_SOURCES
+    ${MIN_VST_HOST_SOURCES}
     source/platform/linux/platform.cpp
     source/platform/linux/runloop.h
     source/platform/linux/runloop.cpp
@@ -51,14 +51,14 @@ if(SMTG_LINUX)
     source/platform/linux/window.cpp
     ${SDK_ROOT}/public.sdk/source/vst/hosting/module_linux.cpp
   )
-  set(min_vst_host_PLATFORM_LIBS
+  set(MIN_VST_HOST_PLATFORM_LIBS
     ${X11_LIBRARIES}
   )
 else()
   message(FATAL_ERROR "This project supports only Linux platforms.")
 endif()
 
-add_executable(min-vst-host ${min_vst_host_sources})
+add_executable(min-vst-host ${MIN_VST_HOST_SOURCES})
 target_compile_features(min-vst-host
   PUBLIC
     cxx_std_17
@@ -66,7 +66,7 @@ target_compile_features(min-vst-host
 target_link_libraries(min-vst-host
   PRIVATE
     sdk_hosting
-    ${min_vst_host_PLATFORM_LIBS}
+    ${MIN_VST_HOST_PLATFORM_LIBS}
 )
 
 target_include_directories(min-vst-host PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
