@@ -29,6 +29,15 @@ The resulting executable `min-vst-host` will be placed in
 `build/bin/RelWithDebInfo` (replace `RelWithDebInfo` with your build
 configuration).
 
+### Build with Nix Flakes
+
+If you have Nix with flakes enabled, you can build the host using the
+provided `flake.nix`:
+
+```bash
+nix build
+```
+
 ### Run
 
 ```bash
